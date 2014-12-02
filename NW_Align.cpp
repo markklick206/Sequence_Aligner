@@ -26,8 +26,8 @@ bool NWAlignment::AlignSequences() {
 	InitializeAlignScoreMatrix();
 	InitializeTracebackMatrix();
 
-	int rows = Seq1Length;
-	int cols = Seq2Length;
+	int rows = Seq1.Length();
+	int cols = Seq2.Length();
 	int score;
 	int choice[3];
 
@@ -52,8 +52,8 @@ bool NWAlignment::AlignSequences() {
 		}
 	}
 	
-	int i = Seq1Length;
-	int j = Seq2Length;
+	int i = Seq1.Length();
+	int j = Seq2.Length();
 	int x = 0;
 	int y = 0;
 	while (i > 0 || j > 0) {
@@ -222,12 +222,10 @@ bool NWAlignment::ReadInputSequencesFromFile(std::string filename) {
         getline(input, (str));
 		for (unsigned int i = 0; i < str.size(); i++)
 			Seq1.push_back(str[i]);
-		Seq1Length = static_cast<int>(Seq1.Length());
         input.ignore();
         getline(input, (str));
 		for (unsigned int i = 0; i < str.size(); i++)
 			Seq2.push_back(str[i]);
-		Seq2Length = static_cast<int>(Seq2.Length());
         input.close();
         if (Seq1.Length() > 0 && Seq2.Length() > 0)
             return true;
@@ -246,12 +244,10 @@ bool NWAlignment::ReadInputSequencesFromFile(std::string filename) {
 void NWAlignment::SetInputSequence(Sequence &seq, int seqNum) {
 	if (seqNum == 1) {
 		Seq1 = seq;
-		Seq1Length = static_cast<int>(Seq1.Length());
 	}
 
 	if (seqNum == 2) {
 		Seq2 = seq;
-		Seq2Length = static_cast<int>(Seq2.Length());
 	}
 }
 
