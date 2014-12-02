@@ -19,9 +19,8 @@
 #include <istream>
 #include <vector>
 #include <stack>
-#include <algorithm>
 
-using namespace std;
+#include "Sequence.h"
 
 class NWAlignment {
 public:	
@@ -67,48 +66,47 @@ public:
 	/************************************************/
 
 	// ## Reads a sequence from a FASTA file, sets the sequence seqNum to this input sequence. IDK how this works?
-	bool ReadInputSequenceFromFASTA(string filename, int seqNum);
+	bool ReadInputSequenceFromFASTA(std::string filename, int seqNum);
 
 	// Reads a pair of sequences from a text file
-	bool ReadInputSequencesFromFile(string filename);
+	bool ReadInputSequencesFromFile(std::string filename);
 
 	// Allows direct setting of the pre-aligned sequences
-	void SetInputSequence(vector<char> &seq, int seqNum);
+	void SetInputSequence(Sequence &seq, int seqNum);
 
 	/************************************************/
 	/* OUTPUT FUNCTIONS								*/
 	/************************************************/
 
 	// Copies aligned sequence seqNum (1 or 2) to the string seq
-	void GetAlignedSequence(vector<char> &seq, int seqNum);
+	void GetAlignedSequence(Sequence &seq, int seqNum);
 
 	// Writes the new aligned sequences to a text file
-	bool WriteAlignedSequencesToFile(string filename);
+	bool WriteAlignedSequencesToFile(std::string filename);
     
     // Prints a sequence to the console
     void PrintSequenceToConsole(int seqNum, bool aligned);
 
 	// Writes the traceback and scoring matrices to a file
-	void OutputTraceAndScoringMatrices(string filename);
+	void OutputTraceAndScoringMatrices(std::string filename);
 
 	/************************************************/
 	/* CONFIGURATION FUNCTIONS						*/
 	/************************************************/
 
 	// Loads a mismatch scoring matrix from a text file
-	bool SetMismatchScoringMatrix(string filename);
+	bool SetMismatchScoringMatrix(std::string filename);
 
 private:
 // Variables
-	vector<char> Seq1, Seq2, Seq1_Aligned, Seq2_Aligned;
-	stack<char> S1A, S2A;
+	Sequence Seq1, Seq2, Seq1_Aligned, Seq2_Aligned;
 	int Seq1Length, Seq2Length;
 	int alignmentScore;
 	int MATCH = 2;
 	int MISMATCH = -1;
 	int GAP = -2;
 	bool SeqAligned;
-	vector<vector<int>> mismatchScoringMatrix; // Future mismatch scoring matrix
+	std::vector<std::vector<int>> mismatchScoringMatrix; // Future mismatch scoring matrix
 	int** alignmentScoreMatrix;
 	int** traceBackMatrix;
 
@@ -118,6 +116,6 @@ private:
 	int max3(int A, int B, int C);
 
 	// Converts a string into a wstring
-	wstring s2ws(const string& s);
+	std::wstring s2ws(const std::string& s);
 
 };

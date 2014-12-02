@@ -21,33 +21,36 @@ Sequence::~Sequence() {
 }
 
 /************************************************/
-/* INPUT FUNCTIONS                                */
+/* OPERATOR FUNCTIONS                           */
+/************************************************/
+
+int Sequence::operator[](int i) {
+	return sequence[i];
+}
+
+void Sequence::push_back(char c) {
+	sequence.push_back(c);
+}
+
+/************************************************/
+/* INPUT FUNCTIONS                              */
 /************************************************/
 
 bool Sequence::setSequenceFromTextFile(std::string filename) {
-    ifstream input;
-	string str;
+    std::ifstream input;
+	std::string str;
     input.open(filename);
     if (input.is_open()) {
         getline(input, (str));
 		for (unsigned int i = 0; i < str.size(); i++)
-			Seq1.push_back(str[i]);
-		Seq1Length = static_cast<int>(Seq1.size());
-		cout << "Seq1Length: " << Seq1Length << endl;
-        input.ignore();
-        getline(input, (str));
-		for (unsigned int i = 0; i < str.size(); i++)
-			Seq2.push_back(str[i]);
-		Seq2Length = static_cast<int>(Seq2.size());
-		cout << "Seq2Length: " << Seq2Length << endl;
-        input.close();
-        if (!Seq1.empty() && !Seq2.empty())
-            return true;
+			sequence.push_back(str[i]);
+		length = sequence.size();
+        return true;
     }
 	else {
-		string error = "Error: Unable to open - ";
+		std::string error = "Error: Unable to open - ";
 		error.append(filename);
-		wstring temp = s2ws(error);
+		std::wstring temp = s2ws(error);
 		LPCWSTR err = temp.c_str();
 		MessageBox(NULL, err, L"Error", MB_OK);
 		return false;
@@ -56,9 +59,9 @@ bool Sequence::setSequenceFromTextFile(std::string filename) {
 }
 
 bool Sequence::setSequenceFromFASTAFile(std::string filename) {
-    ifstream fasta;
-	string line, s;
-	vector<char> seq;
+	std::ifstream fasta;
+	std::string line, s;
+	std::vector<char> seq;
 	fasta.open(filename);
 	if (fasta.is_open()) {
 		getline(fasta, line);
@@ -67,14 +70,13 @@ bool Sequence::setSequenceFromFASTAFile(std::string filename) {
 			s.append(line);
 		}
 		for (unsigned int i = 0; i < s.size(); i++)
-			seq.push_back(s[i]);
-		SetInputSequence(seq, seqNum);
+			sequence.push_back(s[i]);
 		return true;
 	}
 	else {
-		string error = "Error: Unable to open - ";
+		std::string error = "Error: Unable to open - ";
 		error.append(filename);
-		wstring temp = s2ws(error);
+		std::wstring temp = s2ws(error);
 		LPCWSTR err = temp.c_str();
 		MessageBox(NULL, err, L"Error", MB_OK);
 		return false;
@@ -87,7 +89,7 @@ void Sequence::setSequence(std::vector<char> &s) {
 }
 
 void Sequence::setSequence(std::string &s) {
-    for (unsigned int = 0; i < s.size(); i++)
+    for (unsigned int i = 0; i < s.size(); i++)
         sequence.push_back(s[i]);
 }
 
@@ -115,4 +117,14 @@ int Sequence::Length() {
     return length;
 }
 
-
+std::wstring Sequence::s2ws(const std::string &s)
+{
+	int len;
+	int slength = (int)s.length() + 1;
+	len = MultiByteToWideChar(CP_ACP, 0, s.c_str(), slength, 0, 0);
+	wchar_t* buf = new wchar_t[len];
+	MultiByteToWideChar(CP_ACP, 0, s.c_str(), slength, buf, len);
+	std::wstring r(buf);
+	delete[] buf;
+	return r;
+}

@@ -9,22 +9,36 @@
 */
 
 #include <vector>
+#include <iostream>
 #include <string>
+#include <fstream>
+#include <Windows.h>
 
 class Sequence {
 public:
     Sequence();
     Sequence(const Sequence &s);
     ~Sequence();
+
+	/************************************************/
+	/* OPERATOR FUNCTIONS                           */
+	/************************************************/
+
+	int operator[](int i);
+	void push_back(char c);
     
 	/************************************************/
-	/* INPUT FUNCTIONS                                */
+	/* INPUT FUNCTIONS                              */
 	/************************************************/
     
     bool setSequenceFromTextFile(std::string filename);
     bool setSequenceFromFASTAFile(std::string filename);
     void setSequence(std::vector<char> &s);
     void setSequence(std::string &s);
+
+	void setOrganismName(std::string oName);
+	void setAccessionNum(std::string aNum);
+	void setFile(std::string file);
     
 	/************************************************/
 	/* GET FUNCTIONS                                */
@@ -42,4 +56,6 @@ private:
     std::string accessionNum;
     std::string file;
     int length;
+
+	std::wstring s2ws(const std::string &s);
 };

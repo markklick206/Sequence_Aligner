@@ -15,7 +15,7 @@ using namespace std;
 int main() {
 	NWAlignment* NWA = new NWAlignment();
 
-	if (NWA->ReadInputSequenceFromFASTA("sequendce1.fasta", 1) && NWA->ReadInputSequenceFromFASTA("sequence.fasta", 2))
+	if (NWA->ReadInputSequenceFromFASTA("sequence1.fasta", 1) && NWA->ReadInputSequenceFromFASTA("sequence.fasta", 2))
 		NWA->AlignSequences();
     NWA->WriteAlignedSequencesToFile("AlignedSequences.txt");
 	//NWA->PrintSequenceToConsole(1, false);
