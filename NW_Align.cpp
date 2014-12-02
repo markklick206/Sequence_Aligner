@@ -1,4 +1,4 @@
-﻿#define HERE cout << "At line " << __LINE__ << endl;
+#define HERE cout << "At line " << __LINE__ << endl;
 
 #include "NW_Align.h"
 #include <Windows.h>
