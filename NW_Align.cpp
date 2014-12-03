@@ -189,61 +189,7 @@ void NWAlignment::DeleteTracebackMatrix() {
 /* INPUT FUNCTIONS								*/
 /************************************************/
 
-bool NWAlignment::ReadInputSequenceFromFASTA(std::string filename, int seqNum) {
-	std::ifstream fasta;
-	std::string line, s;
-	Sequence seq;
-	fasta.open(filename);
-	if (fasta.is_open()) {
-		getline(fasta, line);
-		while (!fasta.eof()) {
-			getline(fasta, line);
-			s.append(line);
-		}
-		for (unsigned int i = 0; i < s.size(); i++)
-			seq.push_back(s[i]);
-		SetInputSequence(seq, seqNum);
-		return true;
-	}
-	else {
-		std::string error = "Error: Unable to open - ";
-		error.append(filename);
-		std::wstring temp = s2ws(error);
-		LPCWSTR err = temp.c_str();
-		MessageBox(NULL, err, L"Error", MB_OK);
-		return false;
-	}
-    return false;
-}
-
-bool NWAlignment::ReadInputSequencesFromFile(std::string filename) {
-	std::ifstream input;
-	std::string str;
-    input.open(filename);
-    if (input.is_open()) {
-        getline(input, (str));
-		for (unsigned int i = 0; i < str.size(); i++)
-			Seq1.push_back(str[i]);
-        input.ignore();
-        getline(input, (str));
-		for (unsigned int i = 0; i < str.size(); i++)
-			Seq2.push_back(str[i]);
-        input.close();
-        if (Seq1.Length() > 0 && Seq2.Length() > 0)
-            return true;
-    }
-	else {
-		std::string error = "Error: Unable to open - ";
-		error.append(filename);
-		std::wstring temp = s2ws(error);
-		LPCWSTR err = temp.c_str();
-		MessageBox(NULL, err, L"Error", MB_OK);
-		return false;
-    }
-	return false;
-}
-
-void NWAlignment::SetInputSequence(Sequence &seq, int seqNum) {
+void NWAlignment::SetInputSequence(Sequence seq, int seqNum) {
 	if (seqNum == 1) {
 		Seq1 = seq;
 	}
@@ -270,11 +216,11 @@ bool NWAlignment::WriteAlignedSequencesToFile(std::string filename) {
     if (output.is_open()) {
 		HERE
 		output << "Alignment Score: " << alignmentScore / static_cast<double>(Seq1_Aligned.Length()) << std::endl << std::endl;
-        for (unsigned int i = 0; i < Seq1_Aligned.Length(); i++)
+        for (int i = 0; i < Seq1_Aligned.Length(); i++)
             output << Seq1_Aligned[i];
 		output << std::endl;
 		
-        for (unsigned int i = 0; i < Seq2_Aligned.Length(); i++)
+        for (int i = 0; i < Seq2_Aligned.Length(); i++)
             output << Seq2_Aligned[i];
 		output << std::endl;
         output.close();
@@ -295,13 +241,13 @@ void NWAlignment::PrintSequenceToConsole(int seqNum, bool aligned) {
     if (!aligned) {
 		if (seqNum == 1) {
 			std::cout << "Seq1: ";
-			for (unsigned int i = 0; i < Seq1.Length(); i++)
+			for (int i = 0; i < Seq1.Length(); i++)
 				std::cout << Seq1[i];
 			std::cout << std::endl;
 		}
 		if (seqNum == 2) {
 			std::cout << "Seq2: ";
-			for (unsigned int i = 0; i < Seq2.Length(); i++)
+			for (int i = 0; i < Seq2.Length(); i++)
 				std::cout << Seq2[i];
 			std::cout << std::endl;
 		}
@@ -309,13 +255,13 @@ void NWAlignment::PrintSequenceToConsole(int seqNum, bool aligned) {
     else {
         if (seqNum == 1) {
 			std::cout << "Aligned SEQ1: ";
-			for (unsigned int i = 0; i < Seq1_Aligned.Length(); i++)
+			for (int i = 0; i < Seq1_Aligned.Length(); i++)
 				std::cout << Seq1_Aligned[i];
 			std::cout << std::endl;
         }
         if (seqNum == 2) {
 			std::cout << "Aligned SEQ2: ";
-			for (unsigned int i = 0; i < Seq2_Aligned.Length(); i++)
+			for (int i = 0; i < Seq2_Aligned.Length(); i++)
 				std::cout << Seq2_Aligned[i];
 			std::cout << std::endl;
         }
@@ -328,15 +274,15 @@ void NWAlignment::OutputTraceAndScoringMatrices(std::string filename) {
 	file << "Alignment Score Matrix" << std::endl;
 
 	file << "      ";
-	for (unsigned int i = 0; i < Seq2.Length(); i++)
+	for (int i = 0; i < Seq2.Length(); i++)
 		file << std::setw(3) << Seq2[i];
 	file << std::endl;
-	for (unsigned int i = 0; i <= Seq1.Length(); i++) {
+	for (int i = 0; i <= Seq1.Length(); i++) {
 		if (i != 0)
 			file << Seq1[i - 1] << "  ";
 		else
 			file << "   ";
-		for (unsigned int j = 0; j <= Seq2.Length(); j++) {
+		for (int j = 0; j <= Seq2.Length(); j++) {
 			file << std::setw(3) << alignmentScoreMatrix[i][j];
 		}
 		file << std::endl;
@@ -346,15 +292,15 @@ void NWAlignment::OutputTraceAndScoringMatrices(std::string filename) {
 
 	file << "Traceback Matrix" << std::endl;
 	file << "      ";
-	for (unsigned int i = 0; i < Seq2.Length(); i++)
+	for ( int i = 0; i < Seq2.Length(); i++)
 		file << std::setw(3) << Seq2[i];
 	file << std::endl;
-	for (unsigned int i = 0; i <= Seq1.Length(); i++) {
+	for (int i = 0; i <= Seq1.Length(); i++) {
 		if (i != 0)
 			file << Seq1[i - 1] << "  ";
 		else
 			file << "   ";
-		for (unsigned int j = 0; j <= Seq2.Length(); j++) {
+		for (int j = 0; j <= Seq2.Length(); j++) {
 			file << std::setw(3) << traceBackMatrix[i][j];
 		}
 		file << std::endl;

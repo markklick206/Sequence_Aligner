@@ -24,7 +24,7 @@ Sequence::~Sequence() {
 /* OPERATOR FUNCTIONS                           */
 /************************************************/
 
-int Sequence::operator[](int i) {
+char Sequence::operator[](int i) {
 	return sequence[i];
 }
 
@@ -45,7 +45,6 @@ bool Sequence::setSequenceFromTextFile(std::string filename) {
         getline(input, (str));
 		for (unsigned int i = 0; i < str.size(); i++) {
 			sequence.push_back(str[i]);
-			length++;
 		}
 		length = sequence.size();
         return true;
@@ -74,7 +73,6 @@ bool Sequence::setSequenceFromFASTAFile(std::string filename) {
 		}
 		for (unsigned int i = 0; i < s.size(); i++) {
 			sequence.push_back(s[i]);
-			length++;
 		}
 		return true;
 	}

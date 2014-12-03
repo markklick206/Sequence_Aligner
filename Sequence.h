@@ -8,6 +8,8 @@
 *   Holds information about a sequence, such as its sequence, organism, accession numbers, etc.
 */
 
+#pragma once
+
 #include <vector>
 #include <iostream>
 #include <string>
@@ -24,7 +26,7 @@ public:
 	/* OPERATOR FUNCTIONS                           */
 	/************************************************/
 
-	int operator[](int i);
+	char operator[](int i);
 	void push_back(char c);
     
 	/************************************************/
