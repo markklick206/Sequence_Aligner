@@ -19,8 +19,8 @@ int main() {
 	S1.setSequenceFromTextFile("seq1.txt");
 	S2.setSequenceFromTextFile("seq2.txt");
 
-	NWA->SetInputSequence(S1, 1);
-	NWA->SetInputSequence(S2, 2);
+	NWA->SetInputSequence(S1, 2);
+	NWA->SetInputSequence(S2, 1);
 	NWA->AlignSequences();
 	
     NWA->WriteAlignedSequencesToFile("AlignedSequences.txt");

@@ -12,6 +12,8 @@
 	_	Add a more enhanced scoring matrix for alignments
 */
 
+#pragma once
+
 #include <iostream>
 #include <iomanip>
 #include <string>
@@ -65,14 +67,8 @@ public:
 	/* INPUT FUNCTIONS								*/
 	/************************************************/
 
-	// ## Reads a sequence from a FASTA file, sets the sequence seqNum to this input sequence. IDK how this works?
-	bool ReadInputSequenceFromFASTA(std::string filename, int seqNum);
-
-	// Reads a pair of sequences from a text file
-	bool ReadInputSequencesFromFile(std::string filename);
-
 	// Allows direct setting of the pre-aligned sequences
-	void SetInputSequence(Sequence &seq, int seqNum);
+	void SetInputSequence(Sequence seq, int seqNum);
 
 	/************************************************/
 	/* OUTPUT FUNCTIONS								*/
