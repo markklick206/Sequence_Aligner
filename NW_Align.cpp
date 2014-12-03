@@ -1,4 +1,4 @@
-#define HERE cout << "At line " << __LINE__ << endl;
+#define HERE std::cout << "At line " << __LINE__ << std::endl;
 
 #include "NW_Align.h"
 #include <Windows.h>
@@ -15,6 +15,7 @@ NWAlignment::~NWAlignment() { }
 /************************************************/
 
 bool NWAlignment::AlignSequences() {
+	
 	std::stack<char> S1A, S2A;
 	if (!CreateAlignScoreMatrix())
 		return false;
@@ -30,7 +31,7 @@ bool NWAlignment::AlignSequences() {
 	int cols = Seq2.Length();
 	int score;
 	int choice[3];
-
+	
 	for (int i = 1; i <= rows; i++) {
 		for (int j = 1; j <= cols; j++) {
 			if (Seq1[i - 1] == Seq2[j - 1])
@@ -83,6 +84,7 @@ bool NWAlignment::AlignSequences() {
 			j--;
 		}
 	}
+	
 	while (!S1A.empty()) {
 		Seq1_Aligned.push_back(S1A.top());
 		S1A.pop();
@@ -266,14 +268,17 @@ bool NWAlignment::WriteAlignedSequencesToFile(std::string filename) {
 	std::ofstream output;
     output.open(filename);
     if (output.is_open()) {
+		HERE
 		output << "Alignment Score: " << alignmentScore / static_cast<double>(Seq1_Aligned.Length()) << std::endl << std::endl;
         for (unsigned int i = 0; i < Seq1_Aligned.Length(); i++)
             output << Seq1_Aligned[i];
 		output << std::endl;
+		
         for (unsigned int i = 0; i < Seq2_Aligned.Length(); i++)
             output << Seq2_Aligned[i];
 		output << std::endl;
         output.close();
+		
         return true;
     }
     else {

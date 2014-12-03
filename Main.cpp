@@ -15,13 +15,20 @@ using namespace std;
 int main() {
 	NWAlignment* NWA = new NWAlignment();
 
-	if (NWA->ReadInputSequenceFromFASTA("sequence1.fasta", 1) && NWA->ReadInputSequenceFromFASTA("sequence.fasta", 2))
-		NWA->AlignSequences();
+	Sequence S1, S2;
+	S1.setSequenceFromTextFile("seq1.txt");
+	S2.setSequenceFromTextFile("seq2.txt");
+
+	NWA->SetInputSequence(S1, 1);
+	NWA->SetInputSequence(S2, 2);
+	NWA->AlignSequences();
+	
     NWA->WriteAlignedSequencesToFile("AlignedSequences.txt");
-	//NWA->PrintSequenceToConsole(1, false);
-	//NWA->PrintSequenceToConsole(2, false);
-	//NWA->PrintSequenceToConsole(1, true);
-	//NWA->PrintSequenceToConsole(2, true);
+	
+	NWA->PrintSequenceToConsole(1, false);
+	NWA->PrintSequenceToConsole(2, false);
+	NWA->PrintSequenceToConsole(1, true);
+	NWA->PrintSequenceToConsole(2, true);
     NWA->CloseNWAlign();
     
 	return 0;

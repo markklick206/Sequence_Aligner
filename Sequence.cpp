@@ -30,6 +30,7 @@ int Sequence::operator[](int i) {
 
 void Sequence::push_back(char c) {
 	sequence.push_back(c);
+	this->length++;
 }
 
 /************************************************/
@@ -42,8 +43,10 @@ bool Sequence::setSequenceFromTextFile(std::string filename) {
     input.open(filename);
     if (input.is_open()) {
         getline(input, (str));
-		for (unsigned int i = 0; i < str.size(); i++)
+		for (unsigned int i = 0; i < str.size(); i++) {
 			sequence.push_back(str[i]);
+			length++;
+		}
 		length = sequence.size();
         return true;
     }
@@ -69,8 +72,10 @@ bool Sequence::setSequenceFromFASTAFile(std::string filename) {
 			getline(fasta, line);
 			s.append(line);
 		}
-		for (unsigned int i = 0; i < s.size(); i++)
+		for (unsigned int i = 0; i < s.size(); i++) {
 			sequence.push_back(s[i]);
+			length++;
+		}
 		return true;
 	}
 	else {
@@ -114,7 +119,7 @@ std::string Sequence::getFilename() {
 }
 
 int Sequence::Length() {
-    return length;
+    return sequence.size();
 }
 
 std::wstring Sequence::s2ws(const std::string &s)
