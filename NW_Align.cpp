@@ -14,7 +14,7 @@ NWAlignment::~NWAlignment() { }
 /* CONTROL FUNCTIONS							*/
 /************************************************/
 
-bool NWAlignment::AlignSequences() {
+bool NWAlignment::AlignPairSequences() {
 	
 	std::stack<char> S1A, S2A;
 	if (!CreateAlignScoreMatrix())
@@ -214,7 +214,6 @@ bool NWAlignment::WriteAlignedSequencesToFile(std::string filename) {
 	std::ofstream output;
     output.open(filename);
     if (output.is_open()) {
-		HERE
 		output << "Alignment Score: " << alignmentScore / static_cast<double>(Seq1_Aligned.Length()) << std::endl << std::endl;
         for (int i = 0; i < Seq1_Aligned.Length(); i++)
             output << Seq1_Aligned[i];

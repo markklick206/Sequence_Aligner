@@ -1,4 +1,4 @@
-// Class: Graph
+// Class: Graph Header
 
 #include <iostream>
 #include <vector>
@@ -13,12 +13,10 @@ public:
 	Graph();
 	~Graph();
 	
-	void addLeafNode(int edgeval);
-	void addEdge(int to, int from);
-	void joinNodes(node* node1, node* node2, node* parent);
-	
+	void addLeafNode(Sequence* seq);
+	void addEdge(int from, int to, double weight);
+	void addParentNode(node* child1, node* child2);
 	
 private:
-	node* head;
-	vector<node*> G;
+	std::vector<node*> G;
 };

@@ -21,7 +21,7 @@ int main() {
 
 	NWA->SetInputSequence(S1, 2);
 	NWA->SetInputSequence(S2, 1);
-	NWA->AlignSequences();
+	NWA->AlignPairSequences();
 	
     NWA->WriteAlignedSequencesToFile("AlignedSequences.txt");
 	

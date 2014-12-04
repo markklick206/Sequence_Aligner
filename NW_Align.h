@@ -37,7 +37,7 @@ public:
 	/************************************************/
 
 	// Starts the algorithm for aligning two sequences. Needs to have two sequences already loaded into the class members
-	bool AlignSequences();
+	bool AlignPairSequences();
 
 	// Deletes all memory associated with class. Call before destructor
 	void CloseNWAlign();
