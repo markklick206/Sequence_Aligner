@@ -16,12 +16,12 @@ int main() {
 	NWAlignment* NWA = new NWAlignment();
 
 	Sequence S1, S2;
-	S1.setSequenceFromTextFile("seq1.txt");
-	S2.setSequenceFromTextFile("seq2.txt");
+	S1.setSequenceFromTextFile("Seq1.txt");
+	S2.setSequenceFromTextFile("Seq2.txt");
 
 	NWA->SetInputSequence(S1, 2);
 	NWA->SetInputSequence(S2, 1);
-	NWA->AlignSequences();
+	NWA->AlignPairSequences();
 	
     NWA->WriteAlignedSequencesToFile("AlignedSequences.txt");
 	

@@ -37,7 +37,7 @@ public:
 	/************************************************/
 
 	// Starts the algorithm for aligning two sequences. Needs to have two sequences already loaded into the class members
-	bool AlignSequences();
+	bool AlignPairSequences();
 
 	// Deletes all memory associated with class. Call before destructor
 	void CloseNWAlign();
@@ -110,8 +110,4 @@ private:
 
 	// Returns largest of 3 ints
 	int max3(int A, int B, int C);
-
-	// Converts a string into a wstring
-	std::wstring s2ws(const std::string& s);
-
 };
