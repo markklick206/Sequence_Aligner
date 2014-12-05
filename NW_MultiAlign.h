@@ -8,7 +8,7 @@
 #include <vector>
 #include <stack>
 
-#include "MultiSequence.h"
+#include "Multi_Sequence.h"
 
 class NWMultiAlign {
 public:
@@ -22,7 +22,7 @@ public:
   
   void SetMultiSequence(MultiSequence* MSIn, int seqNum);
   
-  bool WriteAlignedSequencesToFile(std::string filename);
+  bool WriteAlignedMultiSequenceToFile(std::string filename);
   void OutputTraceAndScoringMatrices(std::string filename);
   
 private:
