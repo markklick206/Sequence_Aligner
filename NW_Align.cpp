@@ -1,7 +1,6 @@
 #define HERE std::cout << "At line " << __LINE__ << std::endl;
 
 #include "NW_Align.h"
-#include <Windows.h>
 
 NWAlignment::NWAlignment() {
 	alignmentScoreMatrix = 0;
@@ -57,9 +56,9 @@ bool NWAlignment::AlignPairSequences() {
 	int j = Seq2.Length();
 	int x = 0;
 	int y = 0;
+    alignmentScore = alignmentScoreMatrix[i][j];
 	while (i > 0 || j > 0) {
 		if (traceBackMatrix[i][j] == 0) {
-			alignmentScore += alignmentScoreMatrix[i][j];
 			S1A.push(Seq1[i - 1]);
 			x++;
 			S2A.push(Seq2[j - 1]);
@@ -68,7 +67,6 @@ bool NWAlignment::AlignPairSequences() {
 			j--;
 		}
 		else if (traceBackMatrix[i][j] == 1) {
-			alignmentScore += alignmentScoreMatrix[i][j];
 			S1A.push(Seq1[i - 1]);
 			x++;
 			S2A.push('-');
@@ -76,7 +74,6 @@ bool NWAlignment::AlignPairSequences() {
 			i--;
 		}
 		else if (traceBackMatrix[i][j] == -1) {
-			alignmentScore += alignmentScoreMatrix[i][j];
 			S1A.push('-');
 			x++;
 			S2A.push(Seq2[j - 1]);
@@ -227,11 +224,8 @@ bool NWAlignment::WriteAlignedSequencesToFile(std::string filename) {
         return true;
     }
     else {
-		std::string error = "Error: Unable to open - ";
-		error.append(filename);
-		std::wstring temp = s2ws(error);
-		LPCWSTR err = temp.c_str();
-		MessageBox(NULL, err, L"Error", MB_OK);
+        std::cout << "Error: Unable to open - " << filename << std::endl;
+        return false;
     }
     return false;
 }
@@ -321,18 +315,5 @@ bool NWAlignment::SetMismatchScoringMatrix(std::string filename) {
 
 // Returns largest of 3 ints
 int NWAlignment::max3(int A, int B, int C) {
-	return max(A, max(B, C));
-}
-
-// Converts a string into a wstring
-std::wstring NWAlignment::s2ws(const std::string& s)
-{
-	int len;
-	int slength = (int)s.length() + 1;
-	len = MultiByteToWideChar(CP_ACP, 0, s.c_str(), slength, 0, 0);
-	wchar_t* buf = new wchar_t[len];
-	MultiByteToWideChar(CP_ACP, 0, s.c_str(), slength, buf, len);
-	std::wstring r(buf);
-	delete[] buf;
-	return r;
+	return std::max(A, std::max(B, C));
 }

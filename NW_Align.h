@@ -110,8 +110,4 @@ private:
 
 	// Returns largest of 3 ints
 	int max3(int A, int B, int C);
-
-	// Converts a string into a wstring
-	std::wstring s2ws(const std::string& s);
-
 };
