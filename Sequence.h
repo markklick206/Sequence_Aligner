@@ -14,7 +14,6 @@
 #include <iostream>
 #include <string>
 #include <fstream>
-#include <Windows.h>
 
 class Sequence {
 public:
@@ -58,6 +57,4 @@ private:
     std::string accessionNum;
     std::string file;
     int length;
-
-	std::wstring s2ws(const std::string &s);
 };

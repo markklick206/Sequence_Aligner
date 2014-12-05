@@ -8,28 +8,72 @@
 //
 #define HERE cout << "At line " << __LINE__ << endl;
 
-#include "NW_Align.h"
+#include "NW_MultiAlign.h"
+#include "Multi_Sequence.h"
 
 using namespace std;
 
 int main() {
-	NWAlignment* NWA = new NWAlignment();
+	MultiSequence* MS1 = new MultiSequence();
 
-	Sequence S1, S2;
-	S1.setSequenceFromTextFile("seq1.txt");
-	S2.setSequenceFromTextFile("seq2.txt");
+	char* c = new char[3];
+	MS1->setNumSequences(3);
 
-	NWA->SetInputSequence(S1, 2);
-	NWA->SetInputSequence(S2, 1);
-	NWA->AlignPairSequences();
+	c[0] = 'A';
+	c[1] = 'A';
+	c[2] = 'A';
+	MS1->push_back(c);
+
+	c[0] = 'T';
+	c[1] = 'T';
+	c[2] = 'T';
+	MS1->push_back(c);
+
+	c[0] = 'C';
+	c[1] = '-';
+	c[2] = 'G';
+	MS1->push_back(c);
+
+	c[0] = 'G';
+	c[1] = 'G';
+	c[2] = 'G';
+	MS1->push_back(c);
+
+    
+    
+	MultiSequence* MS2 = new MultiSequence();
 	
-    NWA->WriteAlignedSequencesToFile("AlignedSequences.txt");
-	
-	NWA->PrintSequenceToConsole(1, false);
-	NWA->PrintSequenceToConsole(2, false);
-	NWA->PrintSequenceToConsole(1, true);
-	NWA->PrintSequenceToConsole(2, true);
-    NWA->CloseNWAlign();
+	MS2->setNumSequences(3);
+
+	c[0] = 'A';
+	c[1] = 'A';
+	c[2] = 'A';
+	MS2->push_back(c);
+
+	c[0] = 'T';
+	c[1] = 'T';
+	c[2] = 'T';
+	MS2->push_back(c);
+
+	c[0] = 'C';
+	c[1] = '-';
+	c[2] = 'G';
+	MS2->push_back(c);
+
+	c[0] = 'G';
+	c[1] = 'G';
+	c[2] = 'G';
+	MS2->push_back(c);
+    
+    NWMultiAlign NWMA;
+    
+    NWMA.SetMultiSequence(MS1, 1);
+    NWMA.SetMultiSequence(MS2, 2);
+    
+    NWMA.AlignMultiSequences();
+    
+    NWMA.WriteAlignedMultiSequenceToFile("MS.txt");
+    NWMA.OutputTraceAndScoringMatrices("Mat.txt");
     
 	return 0;
 }
