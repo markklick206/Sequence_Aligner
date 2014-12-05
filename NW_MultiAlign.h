@@ -7,6 +7,7 @@
 #include <istream>
 #include <vector>
 #include <stack>
+#include <algorithm>
 
 #include "Multi_Sequence.h"
 

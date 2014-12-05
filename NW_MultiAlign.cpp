@@ -29,9 +29,10 @@ bool NWMultiAlign::AlignMultiSequences() {
 	for (int i = 1; i <= rows; i++) {
 		for (int j = 1; j <= cols; j++) {
 			// Pair wise sum scoring here
-			char* ci = (*MS1)[i];
-			char* cj = (*MS2)[j];
+			char* ci = (*MS1)[i - 1];
+			char* cj = (*MS2)[j - 1];
 			int pairWiseScore = 0;
+			HERE
 			for (int k = 0; k < x; k++) {
 				for (int l = 0; l < y; l++) {
 					if (ci[k] == cj[l])
@@ -48,53 +49,54 @@ bool NWMultiAlign::AlignMultiSequences() {
 			choice[1] = alignmentScoreMatrix[i - 1][j] + (GAP * y);
 			choice[2] = alignmentScoreMatrix[i][j - 1] + (GAP * x);
 			alignmentScoreMatrix[i][j] = max3(choice[0], choice[1], choice[2]);
-
+			HERE
 			if (alignmentScoreMatrix[i][j] == choice[0])
 				traceBackMatrix[i][j] = 0;
 			else if (alignmentScoreMatrix[i][j] == choice[1])
 				traceBackMatrix[i][j] = 1;
 			else
 				traceBackMatrix[i][j] = -1;
+			HERE
 		}
 	}
 	HERE
-	int i = MS1->Length();
-	int j = MS2->Length();
-	alignmentScore = alignmentScoreMatrix[i][j];
-	while (i > 0 || j > 0) {
-		if (traceBackMatrix[i][j] == 0) {
+	int i1 = MS1->Length();
+	int j1 = MS2->Length();
+	alignmentScore = alignmentScoreMatrix[i1][j1];
+	while (i1 > 0 || j1 > 0) {
+		if (traceBackMatrix[i1][j1] == 0) {
 			char* c = new char[x + y];
-			char* ms = (*MS1)[i];
+			char* ms = (*MS1)[i1 - 1];
 			for (int k = 0; k < x; k++)
 				c[k] = ms[k];
-			ms = (*MS2)[j];
+			ms = (*MS2)[j1 - 1];
 			for (int k = x; k < (x + y); k++)
 				c[k] = ms[k - x];
 			MSStack.push(c);
-			i--;
-			j--;
+			i1--;
+			j1--;
 		}
-		else if (traceBackMatrix[i][j] == 1) {
+		else if (traceBackMatrix[i1][j1] == 1) {
 			char* c = new char[x + y];
-			char* ms = (*MS1)[i];
+			char* ms = (*MS1)[i1 - 1];
 			for (int k = 0; k < x; k++)
 				c[k] = ms[k];
-			ms = (*MS2)[j];
+			ms = (*MS2)[j1 - 1];
 			for (int k = x; k < (x + y); k++)
 				c[k] = '-';
 			MSStack.push(c);
-			i--;
+			i1--;
 		}
-		else if (traceBackMatrix[i][j] == -1) {
+		else if (traceBackMatrix[i1][j1] == -1) {
 			char* c = new char[x + y];
-			char* ms = (*MS1)[i];
+			char* ms = (*MS1)[i1 - 1];
 			for (int k = 0; k < x; k++)
 				c[k] = '-';
-			ms = (*MS2)[j];
+			ms = (*MS2)[j1 - 1];
 			for (int k = x; k < (x + y); k++)
 				c[k] = ms[k - x];
 			MSStack.push(c);
-			j--;
+			j1--;
 		}
 	}
     HERE

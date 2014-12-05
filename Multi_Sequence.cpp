@@ -16,8 +16,12 @@ MultiSequence::~MultiSequence() {
 /* OPERATOR FUNCTIONS                           */
 /************************************************/
 
-char* MultiSequence::operator[](int i) {
-	return new char;
+char* MultiSequence::operator[](int a) {
+	char* c = new char[multiSequence.size()];
+	for (int i = 0; i < multiSequence.size(); i++) {
+		c[i] = multiSequence[i][a];
+	}
+	return c;
 }
 
 void MultiSequence::push_back(char* c) {
