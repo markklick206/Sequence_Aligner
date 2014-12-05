@@ -8,28 +8,34 @@
 //
 #define HERE cout << "At line " << __LINE__ << endl;
 
-#include "NW_Align.h"
+#include "NW_MultiAlign.h"
+#include "Multi_Sequence.h"
 
 using namespace std;
 
 int main() {
-	NWAlignment* NWA = new NWAlignment();
-
-	Sequence S1, S2;
-	S1.setSequenceFromTextFile("Seq1.txt");
-	S2.setSequenceFromTextFile("Seq2.txt");
-
-	NWA->SetInputSequence(S1, 2);
-	NWA->SetInputSequence(S2, 1);
-	NWA->AlignPairSequences();
-	
-    NWA->WriteAlignedSequencesToFile("AlignedSequences.txt");
-	
-	NWA->PrintSequenceToConsole(1, false);
-	NWA->PrintSequenceToConsole(2, false);
-	NWA->PrintSequenceToConsole(1, true);
-	NWA->PrintSequenceToConsole(2, true);
-    NWA->CloseNWAlign();
+	MultiSequence* MS1 = new MultiSequence();
+    string str = "AATAGA";
+    Sequence S;
+    S.setSequence(str);
+    MS1->setFirstSequence(S);
+    
+    
+	MultiSequence* MS2 = new MultiSequence();
+    string str1 = "AATTGA";
+    Sequence S1;
+    S1.setSequence(str1);
+    MS2->setFirstSequence(S1);
+    
+    NWMultiAlign NWMA;
+    
+    NWMA.SetMultiSequence(MS1, 1);
+    NWMA.SetMultiSequence(MS2, 2);
+    
+    NWMA.AlignMultiSequences();
+    
+    NWMA.WriteAlignedMultiSequenceToFile("Sequence.txt");
+    NWMA.OutputTraceAndScoringMatrices("Mat.txt");
     
 	return 0;
 }
