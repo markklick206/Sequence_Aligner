@@ -15,65 +15,41 @@ using namespace std;
 
 int main() {
 	MultiSequence* MS1 = new MultiSequence();
-
-	char* c = new char[3];
-	MS1->setNumSequences(3);
-
-	c[0] = 'A';
-	c[1] = 'A';
-	c[2] = 'A';
-	MS1->push_back(c);
-
-	c[0] = 'T';
-	c[1] = 'T';
-	c[2] = 'T';
-	MS1->push_back(c);
-
-	c[0] = 'C';
-	c[1] = '-';
-	c[2] = 'G';
-	MS1->push_back(c);
-
-	c[0] = 'G';
-	c[1] = 'G';
-	c[2] = 'G';
-	MS1->push_back(c);
-
-    
-    
 	MultiSequence* MS2 = new MultiSequence();
+	MultiSequence* MS3 = new MultiSequence();
+	MultiSequence* MS4 = new MultiSequence();
+
+	Sequence S1, S2, S3, S4;
+	S1.setSequenceFromTextFile("seq1.txt");
+	S2.setSequenceFromTextFile("seq2.txt");
+	S3.setSequenceFromTextFile("seq3.txt");
+	S4.setSequenceFromTextFile("seq4.txt");
+
+	MS1->setFirstSequence(S1);
+	MS2->setFirstSequence(S2);
+	MS3->setFirstSequence(S3);
+	MS4->setFirstSequence(S4);
 	
-	MS2->setNumSequences(3);
-
-	c[0] = 'A';
-	c[1] = 'A';
-	c[2] = 'A';
-	MS2->push_back(c);
-
-	c[0] = 'T';
-	c[1] = 'T';
-	c[2] = 'T';
-	MS2->push_back(c);
-
-	c[0] = 'C';
-	c[1] = '-';
-	c[2] = 'G';
-	MS2->push_back(c);
-
-	c[0] = 'G';
-	c[1] = 'G';
-	c[2] = 'G';
-	MS2->push_back(c);
+    NWMultiAlign A1, A2, A3;
+	
+    A1.SetMultiSequence(MS1, 1);
+    A1.SetMultiSequence(MS2, 2);
+	
+	A2.SetMultiSequence(MS3, 1);
+	A2.SetMultiSequence(MS4, 2);
+	
+	A1.AlignMultiSequences();
+	
+	A2.AlignMultiSequences();
     
-    NWMultiAlign NWMA;
+	A3.SetMultiSequence(A1.GetAlignedMultiSequence(), 1);
+	A3.SetMultiSequence(A2.GetAlignedMultiSequence(), 2);
+	
+	A3.AlignMultiSequences();
     
-    NWMA.SetMultiSequence(MS1, 1);
-    NWMA.SetMultiSequence(MS2, 2);
-    
-    NWMA.AlignMultiSequences();
-    
-    NWMA.WriteAlignedMultiSequenceToFile("MS.txt");
-    NWMA.OutputTraceAndScoringMatrices("Mat.txt");
-    
+	A1.WriteAlignedMultiSequenceToFile("A1.txt");
+	A2.WriteAlignedMultiSequenceToFile("A2.txt");
+	A3.WriteAlignedMultiSequenceToFile("A3.txt");
+	
 	return 0;
 }

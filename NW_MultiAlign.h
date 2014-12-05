@@ -22,6 +22,7 @@ public:
   void DeleteTracebackMatrix();
   
   void SetMultiSequence(MultiSequence* MSIn, int seqNum);
+  MultiSequence* GetAlignedMultiSequence();
   
   bool WriteAlignedMultiSequenceToFile(std::string filename);
   void OutputTraceAndScoringMatrices(std::string filename);

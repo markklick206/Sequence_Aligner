@@ -18,7 +18,7 @@ MultiSequence::~MultiSequence() {
 
 char* MultiSequence::operator[](int a) {
 	char* c = new char[multiSequence.size()];
-	for (int i = 0; i < multiSequence.size(); i++) {
+	for (unsigned int i = 0; i < multiSequence.size(); i++) {
 		c[i] = multiSequence[i][a];
 	}
 	return c;
