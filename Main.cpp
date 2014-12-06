@@ -4,7 +4,7 @@
 *	Output: output.txt - Stores the sequence alignments
 *	Also outputs a score for the alignment.
 */
-// Forrest Ireland
+// Forrest Ireland Mark Klick John Talbot
 //
 #define HERE cout << "At line " << __LINE__ << endl;
 
