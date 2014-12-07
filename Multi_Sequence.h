@@ -14,12 +14,15 @@
 #include <iostream>
 #include <string>
 #include <fstream>
+#include <windows.h>
+#include <sstream>
 
 #include "Sequence.h"
 
 class MultiSequence {
 public:
-	MultiSequence();
+	MultiSequence() { }
+	MultiSequence(Sequence s);
 	~MultiSequence();
 
 	/************************************************/
