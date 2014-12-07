@@ -88,6 +88,11 @@ void Sequence::setSequence(std::string &s) {
         sequence.push_back(s[i]);
 }
 
+
+void Sequence::setAccessionNum(int aNum) {
+	accessionNum = aNum;
+}
+
 /************************************************/
 /* GET FUNCTIONS                                */
 /************************************************/
@@ -96,7 +101,7 @@ void Sequence::getSequence(std::vector<char> &R) {
     R = sequence;
 }
 
-std::string Sequence::getAccessionNum() {
+int Sequence::getAccessionNum() {
     return accessionNum;
 }
 
