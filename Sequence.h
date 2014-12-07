@@ -38,7 +38,7 @@ public:
     void setSequence(std::string &s);
 
 	void setOrganismName(std::string oName);
-	void setAccessionNum(std::string aNum);
+	void setAccessionNum(int aNum);
 	void setFile(std::string file);
     
 	/************************************************/
@@ -46,7 +46,7 @@ public:
 	/************************************************/
     
     void getSequence(std::vector<char> &R);
-    std::string getAccessionNum();
+    int getAccessionNum();
     std::string getOrganismName();
     std::string getFilename();
     int Length();
@@ -54,7 +54,7 @@ public:
 private:
     std::vector<char> sequence;
     std::string organismName;
-    std::string accessionNum;
+    int accessionNum;
     std::string file;
     int length;
 };

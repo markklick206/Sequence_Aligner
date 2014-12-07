@@ -22,14 +22,19 @@ public:
   void DeleteTracebackMatrix();
   
   void SetMultiSequence(MultiSequence* MSIn, int seqNum);
+  MultiSequence* GetAlignedMultiSequence();
   
   bool WriteAlignedMultiSequenceToFile(std::string filename);
   void OutputTraceAndScoringMatrices(std::string filename);
-  
+
+  double alignmentScore;
+  double SequenceDistance();
+  int LevenshteinDistance();
+
 private:
 // Variables
   MultiSequence *MS1, *MS2, *MSOut;
-  double alignmentScore;
+  
 	int MATCH = 2;
 	int MISMATCH = -1;
 	int GAP = -2;
