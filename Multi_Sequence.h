@@ -41,6 +41,9 @@ public:
 	// Adds a single sequence to produce a multiSequence of only 1 sequence. Can only add a sequence to an empty multiSequence
 	void setFirstSequence(Sequence &seq);
 
+	// Sets the IDs of all sequences in multiSequence
+	void setSequenceIDs(std::vector<int> id);
+
 	/************************************************/
 	/* GET FUNCTIONS                                */
 	/************************************************/
@@ -53,6 +56,9 @@ public:
 
 	// Returns length of sequences in multiSequence vector
 	int Length();
+
+	// Returns the sequence ID of the input index
+	int getSequenceIDs(int index);
 
 private:
 	std::vector<Sequence> multiSequence;
