@@ -2,11 +2,12 @@
 //#define PRINTDISTMAT
 //#define PRINTQMAT
 //#define PRINTNEWDISTMAT
+#define INFINITY 10000000
 
 double** CreateDistanceMatrix(std::vector<MultiSequence*> *SeqSet) {
 	NWMultiAlign* Align = new NWMultiAlign();
 
-	int x = SeqSet->size();
+	int x = static_cast<int>(SeqSet->size());
 
 	double** DistMat = new double*[x];
 	for (int i = 0; i < x; i++)
@@ -14,6 +15,7 @@ double** CreateDistanceMatrix(std::vector<MultiSequence*> *SeqSet) {
 
 	for (int i = 0; i < x; i++) {
 		for (int j = i; j < x; j++) {
+            
 			Align->SetMultiSequence((*SeqSet)[i], 1);
 			Align->SetMultiSequence((*SeqSet)[j], 2);
 			Align->AlignMultiSequences();
@@ -21,6 +23,9 @@ double** CreateDistanceMatrix(std::vector<MultiSequence*> *SeqSet) {
 			DistMat[j][i] = DistMat[i][j];
 		}
 	}
+    Align->~NWMultiAlign();
+    
+    delete Align;
 	return DistMat;
 }
 
@@ -34,7 +39,7 @@ double Q(double** DistMat, int u, int v, int n) {
 	for (int k = 0; k < n; k++)
 		sumjk += DistMat[v][k];
 
-	q = (n - 2) *DistMat[u][v] - sumik - sumjk;
+	q = (n - 2) * DistMat[u][v] - sumik - sumjk;
 
 	return q;
 }
@@ -45,10 +50,12 @@ double d(double** DistMat, int k, int f, int g) {
 
 void NeighborJoin(std::vector<MultiSequence*> *SeqSet) {
 	double** DistMat = CreateDistanceMatrix(SeqSet);
+	int x = 0;
 
 	while (SeqSet->size() > 2) {
-		int x = SeqSet->size();
+		x = static_cast<int>(SeqSet->size());
 
+        /*
 #ifdef PRINTDISTMAT
 		std::ofstream output;
 		std::stringstream ss;
@@ -69,6 +76,7 @@ void NeighborJoin(std::vector<MultiSequence*> *SeqSet) {
 		output << std::endl << std::endl;
 		output.close();
 #endif
+         */
 
 		double** QMat = new double*[x];
 		for (int i = 0; i < x; i++)
@@ -91,6 +99,11 @@ void NeighborJoin(std::vector<MultiSequence*> *SeqSet) {
 			}
 		}
 
+		for (int i = 0; i < x; i++)
+			delete [] QMat[i];
+		delete [] QMat;
+
+        /*
 #ifdef PRINTQMAT
 		std::ofstream output1;
 		std::stringstream ss1;
@@ -110,6 +123,7 @@ void NeighborJoin(std::vector<MultiSequence*> *SeqSet) {
 		}
 		output1.close();
 #endif
+         */
 
 		NWMultiAlign* Aligner = new NWMultiAlign();
 		Aligner->SetMultiSequence((*SeqSet)[SeqI], 1);
@@ -118,6 +132,14 @@ void NeighborJoin(std::vector<MultiSequence*> *SeqSet) {
 		Aligner->AlignMultiSequences();
 
 		SeqSet->push_back(Aligner->GetAlignedMultiSequence());
+
+		Aligner->~NWMultiAlign();
+        
+		delete Aligner;
+
+		delete (*SeqSet)[SeqI];
+
+		delete (*SeqSet)[SeqJ];
 
 		if (SeqI > SeqJ) {
 			SeqSet->erase(SeqSet->begin() + SeqI);
@@ -128,7 +150,8 @@ void NeighborJoin(std::vector<MultiSequence*> *SeqSet) {
 			SeqSet->erase(SeqSet->begin() + SeqI);
 		}
 
-		x = SeqSet->size();
+		x = static_cast<int>(SeqSet->size());
+        
 		double** newDistMat = new double*[x];
 		for (int i = 0; i < x; i++)
 			newDistMat[i] = new double[x];
@@ -173,16 +196,12 @@ void NeighborJoin(std::vector<MultiSequence*> *SeqSet) {
 		}
 		newDistMat[x - 1][x - 1] = 0;
 
-		DistMat = newDistMat;
 
-		//std::cout << SeqSet->size() << std::endl;
-		//for (unsigned int i = 0; i < SeqSet->size(); i++) {
-		//	std::string str;
-		//	str = "ms";
-		//	str.push_back(65 + i + rand()%23);
-		//	str.append(".txt");
-		//	(*SeqSet)[i]->WriteMultiSequenceToFile(str);
-		//}
+		for (int i = 0; i < x; i++)
+			delete[] DistMat[i];
+		delete [] DistMat;
+		
+		DistMat = newDistMat;
 	}
 
 	NWMultiAlign* Aligner = new NWMultiAlign();
@@ -191,12 +210,24 @@ void NeighborJoin(std::vector<MultiSequence*> *SeqSet) {
 
 	Aligner->AlignMultiSequences();
 	//Aligner->WriteAlignedMultiSequenceToFile("AAAA.txt");
+    
+    delete (*SeqSet)[0];
+    delete (*SeqSet)[1];
 
 	SeqSet->erase(SeqSet->begin() + 1);
 	SeqSet->erase(SeqSet->begin());
 
 	SeqSet->push_back(Aligner->GetAlignedMultiSequence());
 
+	Aligner->~NWMultiAlign();
+    
+	delete Aligner;
+
+	for (int i = 0; i < x; i++)
+		delete[] DistMat[i];
+	delete [] DistMat;
+
+    /*
 #ifdef PRINTNEWDISTMAT
 	std::ofstream output1;
 	output1.open("newDistMat.txt");
@@ -209,6 +240,7 @@ void NeighborJoin(std::vector<MultiSequence*> *SeqSet) {
 	};
 	output1.close();
 #endif
+     */
 }
 
 

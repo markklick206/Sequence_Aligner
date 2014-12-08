@@ -47,6 +47,7 @@ void MultiSequence::setFirstSequence(Sequence &seq) {
 		c[0] = seq[i];
 		push_back(c);
 	}
+	delete [] c;
 	std::vector<int> ID;
 	ID.push_back(seq.getAccessionNum());
 	setSequenceIDs(ID);

@@ -2,6 +2,19 @@
 
 #define HERE std::cout << "At line " << __LINE__ << std::endl;
 
+NWMultiAlign::NWMultiAlign() {
+	alignmentScoreMatrix = 0;
+	traceBackMatrix = 0;
+	MS1 = 0;
+	MS2 = 0;
+	MSOut = 0;
+}
+
+NWMultiAlign::~NWMultiAlign() {
+	DeleteAlignScoreMatrix();
+	DeleteTracebackMatrix();
+}
+
 bool NWMultiAlign::AlignMultiSequences() {
 	std::stack<char*> MSStack;
 	if (!CreateAlignScoreMatrix())
@@ -35,6 +48,9 @@ bool NWMultiAlign::AlignMultiSequences() {
 						pairWiseScore += MISMATCH;
 				}
 			}
+            
+            delete [] ci;
+            delete [] cj;
 			
 			score = pairWiseScore;
 			//double score = pairWiseScore \ (double) (x * y);
@@ -56,37 +72,43 @@ bool NWMultiAlign::AlignMultiSequences() {
 	
 	int i1 = MS1->Length();
 	int j1 = MS2->Length();
+	char* c;
+	char* ms;
 	alignmentScore = alignmentScoreMatrix[i1][j1];
 	while (i1 > 0 || j1 > 0) {
 		if (traceBackMatrix[i1][j1] == 0) {
-			char* c = new char[x + y];
-			char* ms = (*MS1)[i1 - 1];
+			c = new char[x + y];
+			ms = (*MS1)[i1 - 1];
 			for (int k = 0; k < x; k++)
 				c[k] = ms[k];
+			delete [] ms;
 			ms = (*MS2)[j1 - 1];
 			for (int k = x; k < (x + y); k++)
 				c[k] = ms[k - x];
+			delete [] ms;
 			MSStack.push(c);
 			i1--;
 			j1--;
 		}
 		else if (traceBackMatrix[i1][j1] == 1) {
-			char* c = new char[x + y];
-			char* ms = (*MS1)[i1 - 1];
+			c = new char[x + y];
+			ms = (*MS1)[i1 - 1];
 			for (int k = 0; k < x; k++)
 				c[k] = ms[k];
+			delete [] ms;
 			for (int k = x; k < (x + y); k++)
 				c[k] = '-';
 			MSStack.push(c);
 			i1--;
 		}
 		else if (traceBackMatrix[i1][j1] == -1) {
-			char* c = new char[x + y];
+			c = new char[x + y];
 			for (int k = 0; k < x; k++)
 				c[k] = '-';
-			char* ms = (*MS2)[j1 - 1];
+			ms = (*MS2)[j1 - 1];
 			for (int k = x; k < (x + y); k++)
 				c[k] = ms[k - x];
+			delete [] ms;
 			MSStack.push(c);
 			j1--;
 		}
@@ -102,11 +124,15 @@ bool NWMultiAlign::AlignMultiSequences() {
 	MSOut->setNumSequences(x + y);
 	while (!MSStack.empty()) {
 		MSOut->push_back(MSStack.top());
+        delete [] MSStack.top();
 		MSStack.pop();
 	}
 
 	MSOut->setSequenceIDs(IDS);
 
+    DeleteAlignScoreMatrix();
+    DeleteTracebackMatrix();
+    
 	alignmentScore = alignmentScore / (double)MSOut->Length();
 	return true;
 }
@@ -178,6 +204,7 @@ void NWMultiAlign::DeleteAlignScoreMatrix() {
 
 		delete[] alignmentScoreMatrix;
 	}
+	alignmentScoreMatrix = 0;
 }
 
 void NWMultiAlign::DeleteTracebackMatrix() {
@@ -187,6 +214,7 @@ void NWMultiAlign::DeleteTracebackMatrix() {
 
 		delete[] traceBackMatrix;
 	}
+	traceBackMatrix = 0;
 }
 
 void NWMultiAlign::SetMultiSequence(MultiSequence* MSIn, int seqNum){
@@ -235,7 +263,7 @@ void NWMultiAlign::OutputTraceAndScoringMatrices(std::string filename) {
 }
 
 int NWMultiAlign::max3(int A, int B, int C) {
-    return max(A, max(B, C));
+    return std::max(A, std::max(B, C));
 }
 
 double NWMultiAlign::SequenceDistance() {
@@ -249,7 +277,7 @@ double NWMultiAlign::SequenceDistance() {
 
 	for (int i = 0; i < x; i++){
 		if ((*MSOut)[0][i] != '-' && (*MSOut)[1][i] != '-') {
-			if (((*MSOut)[i][0] == (*MSOut)[i][1]))
+			if ((*MSOut)[i][0] == (*MSOut)[i][1])
 				matches++;
 			l++;
 		}
@@ -278,7 +306,7 @@ int NWMultiAlign::LevenshteinDistance() {
 			if ((*MSOut)[i - 1][0] == (*MSOut)[j - 1][1])
 				Mat[i][j] = Mat[i - 1][j - 1];
 			else {
-				Mat[i][j] = min(Mat[i - 1][j] + 1, min(Mat[i][j - 1] + 1, Mat[i - 1][j - 1] + 1));
+				Mat[i][j] = std::min(Mat[i - 1][j] + 1, std::min(Mat[i][j - 1] + 1, Mat[i - 1][j - 1] + 1));
 			}
 		}
 	}
