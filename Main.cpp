@@ -12,6 +12,9 @@
 #include "Multi_Sequence.h"
 #include "NJ.h"
 
+//#define READ_FROM_FASTA
+#define READ_FROM_INPUT_SEQ_TXT
+
 using namespace std;
 
 int main() {
@@ -19,13 +22,23 @@ int main() {
 	SeqSet = new vector<MultiSequence*>;
 
 	ifstream input;
-	input.open("InputSequences.txt");
+#ifdef READ_FROM_FASTA
+	input.open("InputFASTAFiles.txt");
+#else
+    input.open("InputSequences.txt");
+#endif
 	int i = 0;
 	while (!input.eof()) {
+		Sequence seq;
+#ifdef READ_FROM_FASTA
 		string filename;
 		getline(input, filename);
-		Sequence seq;
 		seq.setSequenceFromFASTAFile(filename);
+#else
+        string str;
+        getline(input, str);
+        seq.setSequence(str);
+#endif
 		seq.setAccessionNum(i);
 		SeqSet->push_back(new MultiSequence(seq));
 		i++;
@@ -43,6 +56,11 @@ int main() {
 	cout << "Run Time: " << double(endTime - startTime) / (double)CLOCKS_PER_SEC << " seconds." << endl;
 
 	(*SeqSet)[0]->WriteMultiSequenceToFile("ALIGNMENT.txt");
+    
+    for (int i = 0; i < SeqSet->size(); i++)
+        delete (*SeqSet)[i];
+    
+    delete SeqSet;
 
 	return 0;
 }

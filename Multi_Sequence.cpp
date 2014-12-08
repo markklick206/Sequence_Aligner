@@ -28,7 +28,6 @@ void MultiSequence::push_back(char* c) {
 	for (unsigned int i = 0; i < multiSequence.size(); i++) {
 		multiSequence[i].push_back(c[i]);
 	}
-	delete [] c;
 }
 
 void MultiSequence::setNumSequences(int num) {

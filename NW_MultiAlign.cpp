@@ -48,6 +48,9 @@ bool NWMultiAlign::AlignMultiSequences() {
 						pairWiseScore += MISMATCH;
 				}
 			}
+            
+            delete [] ci;
+            delete [] cj;
 			
 			score = pairWiseScore;
 			//double score = pairWiseScore \ (double) (x * y);
@@ -121,11 +124,15 @@ bool NWMultiAlign::AlignMultiSequences() {
 	MSOut->setNumSequences(x + y);
 	while (!MSStack.empty()) {
 		MSOut->push_back(MSStack.top());
+        delete [] MSStack.top();
 		MSStack.pop();
 	}
 
 	MSOut->setSequenceIDs(IDS);
 
+    DeleteAlignScoreMatrix();
+    DeleteTracebackMatrix();
+    
 	alignmentScore = alignmentScore / (double)MSOut->Length();
 	return true;
 }
@@ -256,7 +263,7 @@ void NWMultiAlign::OutputTraceAndScoringMatrices(std::string filename) {
 }
 
 int NWMultiAlign::max3(int A, int B, int C) {
-    return max(A, max(B, C));
+    return std::max(A, std::max(B, C));
 }
 
 double NWMultiAlign::SequenceDistance() {
@@ -270,7 +277,7 @@ double NWMultiAlign::SequenceDistance() {
 
 	for (int i = 0; i < x; i++){
 		if ((*MSOut)[0][i] != '-' && (*MSOut)[1][i] != '-') {
-			if (((*MSOut)[i][0] == (*MSOut)[i][1]))
+			if ((*MSOut)[i][0] == (*MSOut)[i][1])
 				matches++;
 			l++;
 		}
@@ -299,7 +306,7 @@ int NWMultiAlign::LevenshteinDistance() {
 			if ((*MSOut)[i - 1][0] == (*MSOut)[j - 1][1])
 				Mat[i][j] = Mat[i - 1][j - 1];
 			else {
-				Mat[i][j] = min(Mat[i - 1][j] + 1, min(Mat[i][j - 1] + 1, Mat[i - 1][j - 1] + 1));
+				Mat[i][j] = std::min(Mat[i - 1][j] + 1, std::min(Mat[i][j - 1] + 1, Mat[i - 1][j - 1] + 1));
 			}
 		}
 	}
