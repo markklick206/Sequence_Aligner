@@ -47,6 +47,14 @@ void MultiSequence::setFirstSequence(Sequence &seq) {
 		c[0] = seq[i];
 		push_back(c);
 	}
+	std::vector<int> ID;
+	ID.push_back(seq.getAccessionNum());
+	setSequenceIDs(ID);
+}
+
+void MultiSequence::setSequenceIDs(std::vector<int> id) {
+	for (unsigned int i = 0; i < multiSequence.size(); i++)
+		multiSequence[i].setAccessionNum(id[i]);
 }
 
 /************************************************/
@@ -55,13 +63,6 @@ void MultiSequence::setFirstSequence(Sequence &seq) {
 
 void MultiSequence::WriteMultiSequenceToFile(std::string filename) {
 	std::ofstream output;
-	std::stringstream ss;
-	LARGE_INTEGER time;
-	QueryPerformanceCounter(&time);
-	int a = static_cast<int>(time.QuadPart);
-	filename.clear();
-	ss << a << ".txt";
-	filename = ss.str();
 	output.open(filename);
 	if (output.is_open()) {
 		for (unsigned int i = 0; i < multiSequence.size(); i++) {
@@ -84,4 +85,8 @@ int MultiSequence::numSequences() {
 
 int MultiSequence::Length() {
 	return multiSequence[0].Length();
+}
+
+int MultiSequence::getSequenceIDs(int index) {
+	return multiSequence[index].getAccessionNum();
 }
