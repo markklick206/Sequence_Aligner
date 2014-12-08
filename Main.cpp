@@ -22,19 +22,27 @@ int main() {
 	input.open("InputSequences.txt");
 	int i = 0;
 	while (!input.eof()) {
-		string str;
-		getline(input, str);
+		string filename;
+		getline(input, filename);
 		Sequence seq;
-		seq.setSequence(str);
+		seq.setSequenceFromFASTAFile(filename);
 		seq.setAccessionNum(i);
 		SeqSet->push_back(new MultiSequence(seq));
 		i++;
 	}
 	input.close();
 
+	// Start Timer
+	std::clock_t startTime = clock();
+
 	NeighborJoin(SeqSet);
 
-	(*SeqSet)[0]->WriteMultiSequenceToFile("ALIGNEDSEQUENCESWEGNIURNU.txt");
+	//End Timer
+	std::clock_t endTime = clock();
+
+	cout << "Run Time: " << double(endTime - startTime) / (double)CLOCKS_PER_SEC << " seconds." << endl;
+
+	(*SeqSet)[0]->WriteMultiSequenceToFile("ALIGNMENT.txt");
 
 	return 0;
 }
