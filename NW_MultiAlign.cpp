@@ -2,6 +2,19 @@
 
 #define HERE std::cout << "At line " << __LINE__ << std::endl;
 
+NWMultiAlign::NWMultiAlign() {
+	alignmentScoreMatrix = 0;
+	traceBackMatrix = 0;
+	MS1 = 0;
+	MS2 = 0;
+	MSOut = 0;
+}
+
+NWMultiAlign::~NWMultiAlign() {
+	DeleteAlignScoreMatrix();
+	DeleteTracebackMatrix();
+}
+
 bool NWMultiAlign::AlignMultiSequences() {
 	std::stack<char*> MSStack;
 	if (!CreateAlignScoreMatrix())
@@ -56,37 +69,43 @@ bool NWMultiAlign::AlignMultiSequences() {
 	
 	int i1 = MS1->Length();
 	int j1 = MS2->Length();
+	char* c;
+	char* ms;
 	alignmentScore = alignmentScoreMatrix[i1][j1];
 	while (i1 > 0 || j1 > 0) {
 		if (traceBackMatrix[i1][j1] == 0) {
-			char* c = new char[x + y];
-			char* ms = (*MS1)[i1 - 1];
+			c = new char[x + y];
+			ms = (*MS1)[i1 - 1];
 			for (int k = 0; k < x; k++)
 				c[k] = ms[k];
+			delete [] ms;
 			ms = (*MS2)[j1 - 1];
 			for (int k = x; k < (x + y); k++)
 				c[k] = ms[k - x];
+			delete [] ms;
 			MSStack.push(c);
 			i1--;
 			j1--;
 		}
 		else if (traceBackMatrix[i1][j1] == 1) {
-			char* c = new char[x + y];
-			char* ms = (*MS1)[i1 - 1];
+			c = new char[x + y];
+			ms = (*MS1)[i1 - 1];
 			for (int k = 0; k < x; k++)
 				c[k] = ms[k];
+			delete [] ms;
 			for (int k = x; k < (x + y); k++)
 				c[k] = '-';
 			MSStack.push(c);
 			i1--;
 		}
 		else if (traceBackMatrix[i1][j1] == -1) {
-			char* c = new char[x + y];
+			c = new char[x + y];
 			for (int k = 0; k < x; k++)
 				c[k] = '-';
-			char* ms = (*MS2)[j1 - 1];
+			ms = (*MS2)[j1 - 1];
 			for (int k = x; k < (x + y); k++)
 				c[k] = ms[k - x];
+			delete [] ms;
 			MSStack.push(c);
 			j1--;
 		}
@@ -178,6 +197,7 @@ void NWMultiAlign::DeleteAlignScoreMatrix() {
 
 		delete[] alignmentScoreMatrix;
 	}
+	alignmentScoreMatrix = 0;
 }
 
 void NWMultiAlign::DeleteTracebackMatrix() {
@@ -187,6 +207,7 @@ void NWMultiAlign::DeleteTracebackMatrix() {
 
 		delete[] traceBackMatrix;
 	}
+	traceBackMatrix = 0;
 }
 
 void NWMultiAlign::SetMultiSequence(MultiSequence* MSIn, int seqNum){

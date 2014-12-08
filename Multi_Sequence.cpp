@@ -28,6 +28,7 @@ void MultiSequence::push_back(char* c) {
 	for (unsigned int i = 0; i < multiSequence.size(); i++) {
 		multiSequence[i].push_back(c[i]);
 	}
+	delete [] c;
 }
 
 void MultiSequence::setNumSequences(int num) {
@@ -47,6 +48,7 @@ void MultiSequence::setFirstSequence(Sequence &seq) {
 		c[0] = seq[i];
 		push_back(c);
 	}
+	delete [] c;
 	std::vector<int> ID;
 	ID.push_back(seq.getAccessionNum());
 	setSequenceIDs(ID);

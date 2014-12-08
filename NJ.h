@@ -45,9 +45,10 @@ double d(double** DistMat, int k, int f, int g) {
 
 void NeighborJoin(std::vector<MultiSequence*> *SeqSet) {
 	double** DistMat = CreateDistanceMatrix(SeqSet);
+	int x;
 
 	while (SeqSet->size() > 2) {
-		int x = SeqSet->size();
+		x = SeqSet->size();
 
 #ifdef PRINTDISTMAT
 		std::ofstream output;
@@ -91,6 +92,10 @@ void NeighborJoin(std::vector<MultiSequence*> *SeqSet) {
 			}
 		}
 
+		for (int i = 0; i < x; i++)
+			delete [] QMat[i];
+		delete [] QMat;
+
 #ifdef PRINTQMAT
 		std::ofstream output1;
 		std::stringstream ss1;
@@ -118,6 +123,13 @@ void NeighborJoin(std::vector<MultiSequence*> *SeqSet) {
 		Aligner->AlignMultiSequences();
 
 		SeqSet->push_back(Aligner->GetAlignedMultiSequence());
+
+		Aligner->~NWMultiAlign();
+		delete Aligner;
+
+		delete (*SeqSet)[SeqI];
+
+		delete (*SeqSet)[SeqJ];
 
 		if (SeqI > SeqJ) {
 			SeqSet->erase(SeqSet->begin() + SeqI);
@@ -173,16 +185,12 @@ void NeighborJoin(std::vector<MultiSequence*> *SeqSet) {
 		}
 		newDistMat[x - 1][x - 1] = 0;
 
-		DistMat = newDistMat;
 
-		//std::cout << SeqSet->size() << std::endl;
-		//for (unsigned int i = 0; i < SeqSet->size(); i++) {
-		//	std::string str;
-		//	str = "ms";
-		//	str.push_back(65 + i + rand()%23);
-		//	str.append(".txt");
-		//	(*SeqSet)[i]->WriteMultiSequenceToFile(str);
-		//}
+		for (int i = 0; i < x; i++)
+			delete[] DistMat[i];
+		delete [] DistMat;
+		
+		DistMat = newDistMat;
 	}
 
 	NWMultiAlign* Aligner = new NWMultiAlign();
@@ -196,6 +204,13 @@ void NeighborJoin(std::vector<MultiSequence*> *SeqSet) {
 	SeqSet->erase(SeqSet->begin());
 
 	SeqSet->push_back(Aligner->GetAlignedMultiSequence());
+
+	Aligner->~NWMultiAlign();
+	delete Aligner;
+
+	for (int i = 0; i < x; i++)
+		delete[] DistMat[i];
+	delete [] DistMat;
 
 #ifdef PRINTNEWDISTMAT
 	std::ofstream output1;

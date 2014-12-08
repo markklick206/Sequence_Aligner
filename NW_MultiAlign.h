@@ -13,27 +13,30 @@
 
 class NWMultiAlign {
 public:
-  bool AlignMultiSequences();
-  bool CreateAlignScoreMatrix();
-  bool CreateTracebackMatrix();
-  void InitializeAlignScoreMatrix();
-  void InitializeTracebackMatrix();
-  void DeleteAlignScoreMatrix();
-  void DeleteTracebackMatrix();
-  
-  void SetMultiSequence(MultiSequence* MSIn, int seqNum);
-  MultiSequence* GetAlignedMultiSequence();
-  
-  bool WriteAlignedMultiSequenceToFile(std::string filename);
-  void OutputTraceAndScoringMatrices(std::string filename);
+	NWMultiAlign();
+	~NWMultiAlign();
 
-  double alignmentScore;
-  double SequenceDistance();
-  int LevenshteinDistance();
+	bool AlignMultiSequences();
+	bool CreateAlignScoreMatrix();
+	bool CreateTracebackMatrix();
+	void InitializeAlignScoreMatrix();
+	void InitializeTracebackMatrix();
+	void DeleteAlignScoreMatrix();
+	void DeleteTracebackMatrix();
+  
+	void SetMultiSequence(MultiSequence* MSIn, int seqNum);
+	MultiSequence* GetAlignedMultiSequence();
+  
+	bool WriteAlignedMultiSequenceToFile(std::string filename);
+	void OutputTraceAndScoringMatrices(std::string filename);
+
+	double alignmentScore;
+	double SequenceDistance();
+	int LevenshteinDistance();
 
 private:
 // Variables
-  MultiSequence *MS1, *MS2, *MSOut;
+	MultiSequence *MS1, *MS2, *MSOut;
   
 	int MATCH = 2;
 	int MISMATCH = -1;

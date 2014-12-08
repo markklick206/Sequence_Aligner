@@ -1,0 +1,6 @@
+Input/sequence.fasta
+Input/sequence (2).fasta
+Input/sequence (3).fasta
+Input/sequence (4).fasta
+Input/sequence (5).fasta
+Input/sequence (6).fasta
