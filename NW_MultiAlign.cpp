@@ -92,12 +92,20 @@ bool NWMultiAlign::AlignMultiSequences() {
 		}
 	}
     
+	std::vector<int> IDS;
+	for (unsigned int i = 0; i < MS1->numSequences(); i++)
+		IDS.push_back(MS1->getSequenceIDs(i));
+	for (unsigned int i = 0; i < MS2->numSequences(); i++)
+		IDS.push_back(MS2->getSequenceIDs(i));
+
 	MSOut = new MultiSequence();
 	MSOut->setNumSequences(x + y);
 	while (!MSStack.empty()) {
 		MSOut->push_back(MSStack.top());
 		MSStack.pop();
 	}
+
+	MSOut->setSequenceIDs(IDS);
 
 	alignmentScore = alignmentScore / (double)MSOut->Length();
 	return true;
