@@ -11,6 +11,12 @@
 
 #include "Multi_Sequence.h"
 
+typedef std::vector<int> VI;
+typedef std::vector<VI> VVI;
+typedef std::vector<double> VD;
+typedef std::vector<VD> VVD;
+typedef std::vector<char> VC;
+
 class NWMultiAlign {
 public:
 	NWMultiAlign();
@@ -24,8 +30,10 @@ public:
 	void DeleteAlignScoreMatrix();
 	void DeleteTracebackMatrix();
   
-	void SetMultiSequence(MultiSequence* MSIn, int seqNum);
-	MultiSequence* GetAlignedMultiSequence();
+	void SetMultiSequence(MultiSequence& MSIn, int seqNum);
+	MultiSequence& GetAlignedMultiSequence();
+
+	void ClearMSOut();
   
 	bool WriteAlignedMultiSequenceToFile(std::string filename);
 	void OutputTraceAndScoringMatrices(std::string filename);
@@ -36,13 +44,13 @@ public:
 
 private:
 // Variables
-	MultiSequence *MS1, *MS2, *MSOut;
+	MultiSequence MS1, MS2, MSOut;
   
 	int MATCH = 2;
 	int MISMATCH = -1;
 	int GAP = -2;
-	int** alignmentScoreMatrix;
-	int** traceBackMatrix;
+	VVI alignmentScoreMatrix;
+	VVI traceBackMatrix;
 // Functions
 
 	// Returns largest of 3 ints

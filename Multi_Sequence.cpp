@@ -16,17 +16,31 @@ MultiSequence::~MultiSequence() {
 /* OPERATOR FUNCTIONS                           */
 /************************************************/
 
-char* MultiSequence::operator[](int a) {
-	char* c = new char[multiSequence.size()];
+VC MultiSequence::operator[](int a) {
+	VC c;
 	for (unsigned int i = 0; i < multiSequence.size(); i++) {
-		c[i] = multiSequence[i][a];
+		c.push_back(multiSequence[i][a]);
 	}
 	return c;
 }
 
-void MultiSequence::push_back(char* c) {
+
+void MultiSequence::operator()(int a, VC& c) {
+	c.clear();
+	for (unsigned int i = 0; i < multiSequence.size(); i++) {
+		c.push_back(multiSequence[i][a]);
+	}
+}
+
+void MultiSequence::push_back(VC& c) {
 	for (unsigned int i = 0; i < multiSequence.size(); i++) {
 		multiSequence[i].push_back(c[i]);
+	}
+}
+
+void MultiSequence::push_back(char c) {
+	for (unsigned int i = 0; i < multiSequence.size(); i++) {
+		multiSequence[i].push_back(c);
 	}
 }
 
@@ -42,20 +56,20 @@ void MultiSequence::setFirstSequence(Sequence &seq) {
 		return;
 	}
 	setNumSequences(1);
-	char* c = new char[1];
+	char c;
 	for (int i = 0; i < seq.Length(); i++) {
-		c[0] = seq[i];
+		c = seq[i];
 		push_back(c);
 	}
-	delete [] c;
 	std::vector<int> ID;
 	ID.push_back(seq.getAccessionNum());
 	setSequenceIDs(ID);
 }
 
-void MultiSequence::setSequenceIDs(std::vector<int> id) {
-	for (unsigned int i = 0; i < multiSequence.size(); i++)
+void MultiSequence::setSequenceIDs(std::vector<int>& id) {
+	for (unsigned int i = 0; i < multiSequence.size(); i++) {
 		multiSequence[i].setAccessionNum(id[i]);
+	}
 }
 
 /************************************************/
