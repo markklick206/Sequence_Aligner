@@ -121,8 +121,6 @@ void NeighborJoin(std::vector<MultiSequence>& SeqSet) {
 			}
 		}
 
-		std::cout << "QMat " << count << " finished" << std::endl;
-
         /*
 #ifdef PRINTQMAT
 		std::ofstream output1;
@@ -157,7 +155,7 @@ void NeighborJoin(std::vector<MultiSequence>& SeqSet) {
 
 		SeqSet.push_back(Aligner.GetAlignedMultiSequence());
         
-		std::cout << "Finished " << count << " alignment" << std::endl;
+		std::cout << "Finished alignment" << count << std::endl;
 		std::cout << "\tDone in: " << double(endTime - startTime) / (double)CLOCKS_PER_SEC << " seconds." << std::endl;
         
 		if (SeqI > SeqJ) {
