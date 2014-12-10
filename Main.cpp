@@ -6,41 +6,27 @@
 */
 // Forrest Ireland Mark Klick John Talbot
 //
-#define HERE cout << "At line " << __LINE__ << endl;
+#define HERE std::cout << "At line " << __LINE__ << std::endl;
 
 #include "NW_MultiAlign.h"
 #include "Multi_Sequence.h"
 #include "NJ.h"
 
-//#define READ_FROM_FASTA
-#define READ_FROM_INPUT_SEQ_TXT
-
 using namespace std;
 
 int main() {
-	vector<MultiSequence*>* SeqSet;
-	SeqSet = new vector<MultiSequence*>;
-
+	vector<MultiSequence> SeqSet;
 	ifstream input;
-#ifdef READ_FROM_FASTA
-	input.open("InputFASTAFiles.txt");
-#else
-    input.open("InputSequences.txt");
-#endif
+    input.open("InputFilenames.txt");
 	int i = 0;
 	while (!input.eof()) {
 		Sequence seq;
-#ifdef READ_FROM_FASTA
 		string filename;
 		getline(input, filename);
-		seq.setSequenceFromFASTAFile(filename);
-#else
-        string str;
-        getline(input, str);
-        seq.setSequence(str);
-#endif
+		if (!seq.setSequenceFromFASTAFile(filename))
+            break;
 		seq.setAccessionNum(i);
-		SeqSet->push_back(new MultiSequence(seq));
+		SeqSet.push_back(MultiSequence(seq));
 		i++;
 	}
 	input.close();
@@ -50,17 +36,15 @@ int main() {
 
 	NeighborJoin(SeqSet);
 
+	SeqSet[0].WriteMultiSequenceToFile("ALIGNMENT.txt");
+
 	//End Timer
 	std::clock_t endTime = clock();
 
 	cout << "Run Time: " << double(endTime - startTime) / (double)CLOCKS_PER_SEC << " seconds." << endl;
 
-	(*SeqSet)[0]->WriteMultiSequenceToFile("ALIGNMENT.txt");
-    
-    for (int i = 0; i < SeqSet->size(); i++)
-        delete (*SeqSet)[i];
-    
-    delete SeqSet;
+	string str;
+	getline(cin, str);
 
 	return 0;
 }
