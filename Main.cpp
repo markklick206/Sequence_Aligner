@@ -12,31 +12,19 @@
 #include "Multi_Sequence.h"
 #include "NJ.h"
 
-//#define READ_FROM_FASTA
-
 using namespace std;
 
 int main() {
 	vector<MultiSequence> SeqSet;
-
 	ifstream input;
-#ifdef READ_FROM_FASTA
-	input.open("InputFASTAFiles.txt");
-#else
-    input.open("InputSequences.txt");
-#endif
+    input.open("InputFilenames.txt");
 	int i = 0;
 	while (!input.eof()) {
 		Sequence seq;
-#ifdef READ_FROM_FASTA
 		string filename;
 		getline(input, filename);
-		seq.setSequenceFromFASTAFile(filename);
-#else
-        string str;
-        getline(input, str);
-        seq.setSequence(str);
-#endif
+		if (!seq.setSequenceFromFASTAFile(filename))
+            break;
 		seq.setAccessionNum(i);
 		SeqSet.push_back(MultiSequence(seq));
 		i++;
@@ -54,6 +42,9 @@ int main() {
 	std::clock_t endTime = clock();
 
 	cout << "Run Time: " << double(endTime - startTime) / (double)CLOCKS_PER_SEC << " seconds." << endl;
+
+	string str;
+	getline(cin, str);
 
 	return 0;
 }

@@ -1,0 +1,10 @@
+Data/SD10/sequence (1).fasta
+Data/SD10/sequence (2).fasta
+Data/SD10/sequence (3).fasta
+Data/SD10/sequence (4).fasta
+Data/SD10/sequence (5).fasta
+Data/SD10/sequence (6).fasta
+Data/SD10/sequence (7).fasta
+Data/SD10/sequence (8).fasta
+Data/SD10/sequence (9).fasta
+Data/SD10/sequence (10).fasta

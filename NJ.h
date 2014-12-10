@@ -2,6 +2,9 @@
 //#define PRINTDISTMAT
 //#define PRINTQMAT
 //#define PRINTNEWDISTMAT
+#ifndef INFINITY
+#define INFINITY 1000000
+#endif
 
 VVD CreateDistanceMatrix(std::vector<MultiSequence>& SeqSet) {
 	int x = static_cast<int>(SeqSet.size());
@@ -13,20 +16,33 @@ VVD CreateDistanceMatrix(std::vector<MultiSequence>& SeqSet) {
 	NWMultiAlign Align;
 
 	std::cout << "Starting to create DistMat..." << std::endl;
-	int progress = 0, load = x * (x + 1) / 2;
+	int progress = 0, load = x * (x - 1) / 2;
 	for (int i = 0; i < x; i++) {
-		Align.SetMultiSequence(SeqSet[i], 1);
-		for (int j = i; j < x; j++) {
+		Align.SetMultiSequence(&(SeqSet[i]), 1);
+		for (int j = i + 1; j < x; j++) {
+			progress++;
+
+			std::cout << "Working -- " << progress << "/" << load << std::endl;
 			//std::cout << "At line " << __LINE__ << " " << i << " " << j << std::endl;
-			Align.SetMultiSequence(SeqSet[j], 2);
+			Align.SetMultiSequence(&(SeqSet[j]), 2);
+
+			std::cout << "\tAligning Sequences " << i + 1 << " & " << j + 1 << std::endl;
+			std::clock_t startTime1 = clock();
 			Align.AlignMultiSequences();
+			std::clock_t endTime1 = clock();
+			std::cout << "\t\tDone in: " << double(endTime1 - startTime1) / (double)CLOCKS_PER_SEC << " seconds." << std::endl;
+
+			std::cout << "\tCalculating Levenshtein Distance..." << std::endl;
+			std::clock_t startTime2 = clock();
 			DistMat[i][j] = Align.LevenshteinDistance();
+			std::clock_t endTime2 = clock();
+			std::cout << "\t\tDone in: " << double(endTime2 - startTime2) / (double)CLOCKS_PER_SEC << " seconds." << std::endl;
+
 			Align.ClearMSOut();
 			DistMat[j][i] = DistMat[i][j];
-			progress++;
-			std::cout << "Working -- " << progress << "/" << load << std::endl;
 		}
 	}
+    std::cout << "Finished DistMat" << std::endl;
 	return DistMat;
 }
 
@@ -54,9 +70,11 @@ void NeighborJoin(std::vector<MultiSequence>& SeqSet) {
 	VVD DistMat = CreateDistanceMatrix(SeqSet);
 	VVD QMat;
 	int x = 0;
+    int count = 0;
 
 	while (SeqSet.size() > 2) {
 		x = static_cast<int>(SeqSet.size());
+        count++;
         /*
 #ifdef PRINTDISTMAT
 		std::ofstream output;
@@ -102,7 +120,9 @@ void NeighborJoin(std::vector<MultiSequence>& SeqSet) {
 				}
 			}
 		}
-		
+
+		std::cout << "QMat " << count << " finished" << std::endl;
+
         /*
 #ifdef PRINTQMAT
 		std::ofstream output1;
@@ -125,18 +145,21 @@ void NeighborJoin(std::vector<MultiSequence>& SeqSet) {
 #endif
          */
 
-		NWMultiAlign* Aligner = new NWMultiAlign();
-		Aligner->SetMultiSequence(SeqSet[SeqI], 1);
-		Aligner->SetMultiSequence(SeqSet[SeqJ], 2);
+		std::clock_t startTime = clock();
 
-		Aligner->AlignMultiSequences();
+		NWMultiAlign Aligner;
+		Aligner.SetMultiSequence((&SeqSet[SeqI]), 1);
+		Aligner.SetMultiSequence((&SeqSet[SeqJ]), 2);
 
-		SeqSet.push_back(Aligner->GetAlignedMultiSequence());
+		Aligner.AlignMultiSequences();
 
-		Aligner->~NWMultiAlign();
+		std::clock_t endTime = clock();
+
+		SeqSet.push_back(Aligner.GetAlignedMultiSequence());
         
-		delete Aligner;
-		
+		std::cout << "Finished " << count << " alignment" << std::endl;
+		std::cout << "\tDone in: " << double(endTime - startTime) / (double)CLOCKS_PER_SEC << " seconds." << std::endl;
+        
 		if (SeqI > SeqJ) {
 			SeqSet.erase(SeqSet.begin() + SeqI);
 			SeqSet.erase(SeqSet.begin() + SeqJ);
@@ -196,20 +219,18 @@ void NeighborJoin(std::vector<MultiSequence>& SeqSet) {
 		DistMat = newDistMat;
 	}
 	
-	NWMultiAlign* Aligner = new NWMultiAlign();
-	Aligner->SetMultiSequence(SeqSet[0], 1);
-	Aligner->SetMultiSequence(SeqSet[1], 2);
+	NWMultiAlign Aligner;
+	Aligner.SetMultiSequence((&SeqSet[0]), 1);
+	Aligner.SetMultiSequence((&SeqSet[1]), 2);
 
-	Aligner->AlignMultiSequences();
+	Aligner.AlignMultiSequences();
 
 	SeqSet.erase(SeqSet.begin() + 1);
 	SeqSet.erase(SeqSet.begin());
 
-	SeqSet.push_back(Aligner->GetAlignedMultiSequence());
+	SeqSet.push_back(Aligner.GetAlignedMultiSequence());
 
-	Aligner->~NWMultiAlign();
-    
-	delete Aligner;
+    std::cout << "Final Alignment finished" << std::endl;
     /*
 #ifdef PRINTNEWDISTMAT
 	std::ofstream output1;

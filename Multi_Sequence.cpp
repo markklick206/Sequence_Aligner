@@ -77,16 +77,38 @@ void MultiSequence::setSequenceIDs(std::vector<int>& id) {
 /************************************************/
 
 void MultiSequence::WriteMultiSequenceToFile(std::string filename) {
+    std::vector<std::string> vOut(multiSequence.size());
 	std::ofstream output;
+    int L = Length();
+    int charPerLine = 100;
 	output.open(filename);
 	if (output.is_open()) {
-		for (unsigned int i = 0; i < multiSequence.size(); i++) {
-			output << multiSequence[i].getAccessionNum() << "\t";
-			for (int j = 0; j < multiSequence[i].Length(); j++) {
-				output << multiSequence[i][j];
-			}
-			output << std::endl;
-		}
+        
+        
+        for (int k = 0; k < L / charPerLine; k++) {
+            output << "\t" << std::setw(5) << std::left << (k * charPerLine) + 1 << std::setw(charPerLine - 5) << std::right << ((k + 1) * charPerLine) << std::endl;
+            for (unsigned int i = 0; i < multiSequence.size(); i++) {
+                output << multiSequence[i].getAccessionNum() << "\t";
+                for (int j = (k * charPerLine); j < (k + 1) * charPerLine; j++) {
+                    output << multiSequence[i][j];
+                }
+                output << std::endl;
+            }
+            output << std::endl;
+        }
+        
+        
+        int k = L / charPerLine;
+        output << "\t" << std::setw(5) << std::left << (k * charPerLine) + 1 << std::setw(L % charPerLine - 5) << std::right << L << std::endl;
+        for (unsigned int i = 0; i < multiSequence.size(); i++) {
+            output << multiSequence[i].getAccessionNum() << "\t";
+            for (int j = ((L / charPerLine) * charPerLine); j < L; j++) {
+                output << multiSequence[i][j];
+            }
+            output << std::endl;
+        }
+        output << std::endl;
+        
 		output.close();
 	}
 	else {
@@ -95,7 +117,7 @@ void MultiSequence::WriteMultiSequenceToFile(std::string filename) {
 }
 
 int MultiSequence::numSequences() {
-	return multiSequence.size();
+	return static_cast<int>(multiSequence.size());
 }
 
 int MultiSequence::Length() {

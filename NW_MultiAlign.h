@@ -30,7 +30,7 @@ public:
 	void DeleteAlignScoreMatrix();
 	void DeleteTracebackMatrix();
   
-	void SetMultiSequence(MultiSequence& MSIn, int seqNum);
+	void SetMultiSequence(MultiSequence* MSIn, int seqNum);
 	MultiSequence& GetAlignedMultiSequence();
 
 	void ClearMSOut();
@@ -44,7 +44,7 @@ public:
 
 private:
 // Variables
-	MultiSequence MS1, MS2, MSOut;
+	MultiSequence *MS1, *MS2, MSOut;
   
 	int MATCH = 2;
 	int MISMATCH = -1;
